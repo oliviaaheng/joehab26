@@ -1,0 +1,94 @@
+---
+import PrimaryButton from "./PrimaryButton.astro";
+
+interface Props {
+  id?: string;
+  title?: string;
+  description?: string;
+  buttonLabel?: string;
+}
+
+const {
+  id = "camera-capture",
+  title = "Capture a quick photo",
+  description = "Tap the button to open your device camera and grab a moment.",
+  buttonLabel = "Open Camera",
+} = Astro.props;
+---
+
+<section
+  id={id}
+  data-camera-root
+  class="flex flex-col gap-6 rounded-3xl border border-white/60 bg-white/80 p-6 shadow-[0_30px_80px_-50px_rgba(53,36,24,0.7)] backdrop-blur sm:p-8"
+>
+  <div class="flex flex-col gap-3">
+    <p class="text-xs font-semibold uppercase tracking-[0.3em] text-[#9a8578]">Camera Lab</p>
+    <h2 class="font-['Fraunces'] text-2xl text-[#2b2623] sm:text-3xl">{title}</h2>
+    <p class="text-sm text-[#5e4b41]">{description}</p>
+  </div>
+
+  <div class="flex flex-col gap-6 lg:flex-row lg:items-start">
+    <div class="flex flex-col gap-4 lg:w-64">
+      <PrimaryButton type="button" label={buttonLabel} data-camera-button />
+      <p class="text-xs font-medium uppercase tracking-[0.3em] text-[#a38d7e]">
+        Instant preview below
+      </p>
+      <p class="text-sm text-[#5e4b41]">
+        Works best on mobile devices with camera access enabled.
+      </p>
+    </div>
+
+    <div class="relative aspect-[4/3] w-full overflow-hidden rounded-3xl border border-white/70 bg-gradient-to-br from-[#f4e7db] via-white to-[#ead8c8] shadow-[0_22px_60px_-40px_rgba(52,34,22,0.7)] lg:flex-1">
+      <div class="absolute inset-0 flex flex-col items-center justify-center gap-2 p-6 text-center text-sm text-[#7b685b]" data-camera-placeholder>
+        <span class="text-lg font-semibold text-[#6a5446]">No photo yet</span>
+        <span>Capture a moment to see it appear here.</span>
+      </div>
+      <img
+        data-camera-preview
+        class="absolute inset-0 hidden h-full w-full object-cover"
+        alt="Camera preview"
+      />
+    </div>
+  </div>
+
+  <input
+    type="file"
+    accept="image/*"
+    capture="environment"
+    class="sr-only"
+    data-camera-input
+  />
+</section>
+
+<script>
+  const roots = document.querySelectorAll<HTMLElement>("[data-camera-root]");
+
+  roots.forEach((root) => {
+    const button = root.querySelector<HTMLButtonElement>("[data-camera-button]");
+    const input = root.querySelector<HTMLInputElement>("[data-camera-input]");
+    const preview = root.querySelector<HTMLImageElement>("[data-camera-preview]");
+    const placeholder = root.querySelector<HTMLElement>("[data-camera-placeholder]");
+
+    let objectUrl: string | null = null;
+
+    button?.addEventListener("click", () => {
+      input?.click();
+    });
+
+    input?.addEventListener("change", () => {
+      const file = input?.files?.[0];
+      if (!file || !preview) {
+        return;
+      }
+
+      if (objectUrl) {
+        URL.revokeObjectURL(objectUrl);
+      }
+
+      objectUrl = URL.createObjectURL(file);
+      preview.src = objectUrl;
+      preview.classList.remove("hidden");
+      placeholder?.classList.add("hidden");
+    });
+  });
+</script>
