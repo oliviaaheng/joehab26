@@ -1,0 +1,77 @@
+[
+  {
+    "name": "WaterFire Providence",
+    "description": "A captivating art installation featuring over 80 bonfires burning on the rivers of downtown Providence, accompanied by music and performances.",
+    "address": "Waterplace Park, Providence, RI 02903"
+  },
+  {
+    "name": "RISD Museum",
+    "description": "The art museum of the Rhode Island School of Design featuring over 100,000 works spanning ancient to contemporary art.",
+    "address": "20 N Main St, Providence, RI 02903"
+  },
+  {
+    "name": "Federal Hill",
+    "description": "Providence's Little Italy, known for its authentic Italian restaurants, bakeries, and the iconic DePasquale Square fountain.",
+    "address": "Atwells Ave, Providence, RI 02903"
+  },
+  {
+    "name": "Prospect Terrace Park",
+    "description": "A scenic overlook park offering panoramic views of downtown Providence, perfect for sunset watching and photos.",
+    "address": "75 Congdon St, Providence, RI 02906"
+  },
+  {
+    "name": "Roger Williams Park Zoo",
+    "description": "One of the oldest zoos in the country featuring over 100 species, a carousel, and beautiful botanical gardens.",
+    "address": "1000 Elmwood Ave, Providence, RI 02907"
+  },
+  {
+    "name": "Thayer Street",
+    "description": "A vibrant college street near Brown University filled with eclectic shops, international restaurants, and cafes.",
+    "address": "Thayer St, Providence, RI 02906"
+  },
+  {
+    "name": "Providence Performing Arts Center",
+    "description": "A historic 1928 theater palace hosting Broadway shows, concerts, and performances in an opulent setting.",
+    "address": "220 Weybosset St, Providence, RI 02903"
+  },
+  {
+    "name": "Benefit Street",
+    "description": "A mile-long historic street known as the 'Mile of History' featuring beautifully preserved 18th and 19th-century homes.",
+    "address": "Benefit St, Providence, RI 02903"
+  },
+  {
+    "name": "India Point Park",
+    "description": "A waterfront park at the confluence of the Seekonk and Providence Rivers, perfect for walking, biking, and enjoying harbor views.",
+    "address": "201 India St, Providence, RI 02903"
+  },
+  {
+    "name": "The Arcade Providence",
+    "description": "America's oldest indoor shopping mall, now featuring micro-lofts on upper floors and unique local shops and eateries below.",
+    "address": "65 Weybosset St, Providence, RI 02903"
+  },
+  {
+    "name": "First Works Festival",
+    "description": "Providence's annual performing arts festival showcasing innovative theater, dance, music, and multimedia performances.",
+    "address": "Various venues throughout Providence, RI"
+  },
+  {
+    "name": "Brown University Campus",
+    "description": "Explore the beautiful Ivy League campus with its historic buildings, green spaces, and the famous Van Wickle Gates.",
+    "address": "Providence, RI 02912"
+  },
+  {
+    "name": "Downtown Providence Art Walk",
+    "description": "Self-guided tour of the city's vibrant public art scene, including murals, sculptures, and installations by local artists.",
+    "address": "Downtown Providence, RI 02903"
+  },
+  {
+    "name": "Providence Flea",
+    "description": "A curated outdoor market featuring vintage finds, handmade goods, artisanal foods, and live music along the river.",
+    "address": "100 S Water St, Providence, RI 02903"
+  },
+  {
+    "name": "John Brown House",
+    "description": "A magnificent 1788 mansion offering guided tours that showcase Providence's merchant elite and colonial history.",
+    "address": "52 Power St, Providence, RI 02906"
+  }
+]
