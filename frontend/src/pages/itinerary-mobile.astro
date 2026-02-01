@@ -1,0 +1,238 @@
+---
+import Layout from "../layouts/Layout.astro";
+import PageHeader from "../components/PageHeader.astro";
+
+import fixtureData from "../../../fixtures/pvd_itinerary.json";
+---
+
+<Layout public>
+  <Fragment slot="head">
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600&family=Space+Grotesk:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+  </Fragment>
+
+  <main class="min-h-screen px-5 pb-14 pt-10 sm:px-8 lg:px-14">
+    <div class="mx-auto flex max-w-4xl flex-col gap-8">
+      <PageHeader
+        label="Your Itinerary"
+        title="Here's your day"
+        description="A curated timeline based on your preferences."
+      />
+
+      <div id="itinerary-loading" class="flex items-center justify-center py-16">
+        <p class="text-sm text-[#7f6b5c]">Loading itinerary&hellip;</p>
+      </div>
+
+      <p id="itinerary-error" class="hidden text-sm font-medium text-red-600"></p>
+
+      <div id="itinerary-timeline" class="hidden flex-col gap-6"></div>
+
+      <div id="itinerary-actions" class="hidden flex-col items-center gap-4 sm:flex-row sm:justify-center">
+        <button
+          id="save-itinerary-btn"
+          type="button"
+          class="inline-flex items-center justify-center rounded-full bg-[#d9824c] px-6 py-3 text-sm font-semibold uppercase tracking-[0.15em] text-white shadow-[0_12px_28px_-18px_rgba(86,45,18,0.8)] transition hover:-translate-y-0.5 hover:bg-[#c7723b] hover:shadow-[0_16px_32px_-20px_rgba(86,45,18,0.9)] focus:outline-none focus:ring-2 focus:ring-[#e6b587]"
+        >
+          Save Itinerary
+        </button>
+        <a
+          href="/constraints"
+          class="inline-flex items-center justify-center rounded-full border border-[#c9b6a4] px-6 py-3 text-sm font-semibold text-[#4e3d35] transition hover:bg-[#c9b6a4]/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c9b6a4]"
+        >
+          Plan Another Day
+        </a>
+      </div>
+    </div>
+  </main>
+
+  <script define:vars={{ fixtureData }}>
+    window.__MOCK_ITINERARY__ = fixtureData;
+  </script>
+
+  <script>
+    interface Event {
+      name: string;
+      description: string;
+      address: string;
+      website: string;
+      image: string;
+      cost: string;
+      category: string;
+    }
+
+    interface ItineraryEvent {
+      event: Event;
+      start: string;
+      end: string;
+      pictures: string[];
+    }
+
+    interface Itinerary {
+      events: ItineraryEvent[];
+    }
+
+    const loadingEl = document.getElementById("itinerary-loading")!;
+    const errorEl = document.getElementById("itinerary-error")!;
+    const timelineEl = document.getElementById("itinerary-timeline")!;
+    const actionsEl = document.getElementById("itinerary-actions")!;
+    const saveBtn = document.getElementById("save-itinerary-btn") as HTMLButtonElement;
+
+    const itinerary: Itinerary = (window as any).__MOCK_ITINERARY__;
+    let isSaved = false;
+
+    function init() {
+      if (!itinerary || !itinerary.events?.length) {
+        showError("No events found in this itinerary.");
+        return;
+      }
+
+      renderTimeline(itinerary.events);
+      loadingEl.classList.add("hidden");
+      timelineEl.classList.remove("hidden");
+      timelineEl.classList.add("flex");
+      actionsEl.classList.remove("hidden");
+      actionsEl.classList.add("flex");
+    }
+
+    function showError(msg: string) {
+      loadingEl.classList.add("hidden");
+      errorEl.textContent = msg;
+      errorEl.classList.remove("hidden");
+    }
+
+    function formatTime(iso: string): string {
+      try {
+        const d = new Date(iso);
+        return d.toLocaleTimeString([], { hour: "numeric", minute: "2-digit" });
+      } catch {
+        return iso;
+      }
+    }
+
+    function readFileAsDataUrl(file: File): Promise<string> {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(reader.result as string);
+        reader.onerror = () => reject(new Error("Failed to read file."));
+        reader.readAsDataURL(file);
+      });
+    }
+
+    function updateGallery(galleryEl: HTMLElement, pictures: string[]) {
+      galleryEl.innerHTML = "";
+      if (!pictures.length) {
+        galleryEl.classList.add("hidden");
+        return;
+      }
+      galleryEl.classList.remove("hidden");
+      pictures.forEach((url) => {
+        const img = document.createElement("img");
+        img.src = url;
+        img.alt = "Attached photo";
+        img.className =
+          "h-20 w-28 flex-shrink-0 rounded-2xl border border-white/70 object-cover shadow-[0_10px_30px_-20px_rgba(53,36,24,0.8)]";
+        galleryEl.appendChild(img);
+      });
+    }
+
+    function renderTimeline(events: ItineraryEvent[]) {
+      timelineEl.innerHTML = "";
+      events.forEach((entry, index) => {
+        const ev = entry.event;
+        const card = document.createElement("div");
+        card.className =
+          "relative rounded-3xl border border-white/60 bg-white/80 p-6 shadow-[0_30px_80px_-50px_rgba(53,36,24,0.7)] backdrop-blur sm:p-8 flex flex-col gap-3";
+
+        const timeRange = `${formatTime(entry.start)} \u2013 ${formatTime(entry.end)}`;
+
+        let html = `
+          <div class="flex flex-wrap items-center gap-3">
+            <span class="text-xs font-semibold uppercase tracking-[0.2em] text-[#7f6b5c]">${timeRange}</span>
+            ${ev.category ? `<span class="rounded-full bg-[#f4e7db] px-3 py-0.5 text-xs font-semibold text-[#5e4b41]">${ev.category}</span>` : ""}
+            <span class="camera-slot ml-auto"></span>
+          </div>
+          <h2 class="font-['Fraunces'] text-xl sm:text-2xl">${ev.name}</h2>`;
+
+        if (ev.description) {
+          html += `<p class="text-sm text-[#5e4b41]">${ev.description}</p>`;
+        }
+
+        const details: string[] = [];
+        if (ev.address) details.push(`<span class="text-[#8d7666]">${ev.address}</span>`);
+        if (ev.cost) details.push(`<span class="text-[#8d7666]">${ev.cost}</span>`);
+        if (details.length) {
+          html += `<p class="text-xs font-semibold uppercase tracking-[0.18em]">${details.join(" &middot; ")}</p>`;
+        }
+
+        if (ev.website) {
+          html += `<a href="${ev.website}" target="_blank" rel="noopener noreferrer" class="text-sm font-medium text-[#d9824c] underline hover:text-[#c7723b]">Visit website</a>`;
+        }
+
+        card.innerHTML = html;
+
+        const cameraSlot = card.querySelector(".camera-slot") as HTMLElement;
+        const cameraBtn = document.createElement("button");
+        cameraBtn.type = "button";
+        cameraBtn.className =
+          "inline-flex h-9 w-9 items-center justify-center rounded-full border border-[#e2d4c6] text-[#7f6b5c] transition hover:-translate-y-0.5 hover:bg-[#f4e7db]/80 hover:text-[#5e4b41] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d9824c]/60";
+        cameraBtn.setAttribute("aria-label", "Attach a photo");
+        cameraBtn.innerHTML = `
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4">
+            <path d="M4 7h3l2-3h6l2 3h3v11a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2z" />
+            <circle cx="12" cy="13" r="3.2" />
+          </svg>
+        `;
+        cameraSlot.replaceWith(cameraBtn);
+
+        const fileInput = document.createElement("input");
+        fileInput.type = "file";
+        fileInput.accept = "image/*";
+        fileInput.capture = "environment";
+        fileInput.className = "hidden";
+
+        const gallery = document.createElement("div");
+        gallery.className = "hidden flex items-center gap-3 overflow-x-auto pt-2";
+
+        entry.pictures = entry.pictures ?? [];
+        updateGallery(gallery, entry.pictures);
+
+        cameraBtn.addEventListener("click", () => fileInput.click());
+        fileInput.addEventListener("change", async () => {
+          const file = fileInput.files?.[0];
+          fileInput.value = "";
+          if (!file) return;
+
+          try {
+            const dataUrl = await readFileAsDataUrl(file);
+            entry.pictures = [...entry.pictures, dataUrl];
+            updateGallery(gallery, entry.pictures);
+          } catch (err) {
+            showError(err instanceof Error ? err.message : "Failed to attach photo.");
+          }
+        });
+
+        card.appendChild(fileInput);
+        card.appendChild(gallery);
+        timelineEl.appendChild(card);
+      });
+    }
+
+    // Mock save button
+    saveBtn.addEventListener("click", () => {
+      if (isSaved) return;
+      saveBtn.disabled = true;
+      saveBtn.textContent = "Saving\u2026";
+
+      setTimeout(() => {
+        isSaved = true;
+        saveBtn.textContent = "Saved!";
+      }, 800);
+    });
+
+    init();
+  </script>
+</Layout>
