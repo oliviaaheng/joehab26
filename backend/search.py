@@ -1,3 +1,6 @@
+import os
+
+import requests
 from openai import OpenAI
 from pydantic import BaseModel
 from dotenv import load_dotenv
@@ -7,6 +10,31 @@ from dataclasses import dataclass
 load_dotenv()
 
 client = OpenAI()
+
+
+def fetch_image(keyword: str) -> str:
+    api_key = os.environ.get("PIXABAY_API_KEY", "")
+    if not api_key:
+        return ""
+    try:
+        resp = requests.get(
+            "https://pixabay.com/api/",
+            params={
+                "key": api_key,
+                "q": keyword,
+                "image_type": "photo",
+                "per_page": 3,
+            },
+            timeout=5,
+        )
+        resp.raise_for_status()
+        hits = resp.json().get("hits", [])
+        if hits:
+            return hits[0].get("webformatURL", "")
+    except Exception:
+        pass
+    return ""
+
 
 ## DATA CLASSES
 
@@ -66,7 +94,11 @@ def events(constraints: Constraints) -> Optional[GeneratedEvents]:
         text_format=GeneratedEvents,
     )
 
-    return response.output_parsed
+    result = response.output_parsed
+    if result:
+        for event in result.events:
+            event.image = fetch_image(event.name)
+    return result
 
 
 class EventDetails(BaseModel):
