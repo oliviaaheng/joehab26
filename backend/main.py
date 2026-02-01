@@ -3,11 +3,25 @@ from flask_cors import CORS
 from search import build_constraints
 import search
 import uuid
+import json
+import os
 
 database = {
     "itineraries": {},  # itinerary_id -> { email, itinerary }
     "user_itineraries": {},  # email -> [itinerary_id, ...]
 }
+
+# Seed database with Providence fixture itinerary
+_fixture_path = os.path.join(os.path.dirname(__file__), "fixtures", "pvd_itinerary.json")
+with open(_fixture_path) as _f:
+    _pvd_itinerary = json.load(_f)
+_fixture_id = "pvd-fixture"
+_fixture_email = "edward_wibowo@brown.edu"
+database["itineraries"][_fixture_id] = {
+    "email": _fixture_email,
+    "itinerary": _pvd_itinerary,
+}
+database["user_itineraries"][_fixture_email] = [_fixture_id]
 
 app = Flask(__name__)
 CORS(
