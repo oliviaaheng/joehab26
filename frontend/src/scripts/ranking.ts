@@ -1,12 +1,11 @@
+import { generateItinerary, type Event, type ScoredEvent, type Constraints } from "./api";
+
 type RatingState = {
   ratings: Record<string, number>;
   comparisons: number;
 };
 
-type Activity = {
-  name: string;
-  address: string;
-};
+type Activity = Event & { name: string; address: string };
 
 const STORAGE_KEY = "ranking-preferences-v1";
 const DEFAULT_RATING = 1000;
@@ -15,16 +14,18 @@ const K_FACTOR = 24;
 const pageRoot = document.querySelector<HTMLElement>("main[data-activities]");
 
 if (pageRoot) {
-  const activities = parseActivities(pageRoot.dataset.activities);
-  if (activities.length >= 2) {
-    initializeRanking(pageRoot, activities);
+  const raw = localStorage.getItem("unserious-activities");
+  if (!raw) {
+    window.location.href = "/constraints";
+  } else {
+    const activities = parseActivities(raw);
+    if (activities.length >= 2) {
+      initializeRanking(pageRoot, activities);
+    }
   }
 }
 
-function parseActivities(payload?: string): Activity[] {
-  if (!payload) {
-    return [];
-  }
+function parseActivities(payload: string): Activity[] {
   try {
     const parsed = JSON.parse(payload);
     if (!Array.isArray(parsed)) {
@@ -80,6 +81,62 @@ function initializeRanking(root: HTMLElement, activities: Activity[]) {
     renderPair(currentPair, cards);
     updateStats(countEl, state);
   });
+
+  // --- Generate Itinerary ---
+  const genBtn = document.getElementById("generate-itinerary-btn") as HTMLButtonElement | null;
+  const genError = document.getElementById("ranking-error");
+
+  if (genBtn) {
+    genBtn.addEventListener("click", async () => {
+      if (genError) genError.classList.add("hidden");
+
+      const constraintsRaw = localStorage.getItem("unserious-constraints");
+      if (!constraintsRaw) {
+        window.location.href = "/constraints";
+        return;
+      }
+
+      const constraints: Constraints = JSON.parse(constraintsRaw);
+
+      // Normalize Elo ratings to 0–1 scores
+      const ratings = state.ratings;
+      const names = Object.keys(ratings);
+      const values = names.map((n) => ratings[n]);
+      const min = Math.min(...values, DEFAULT_RATING);
+      const max = Math.max(...values, DEFAULT_RATING);
+      const range = max - min || 1;
+
+      const scoredEvents: ScoredEvent[] = activities.map((a) => ({
+        event: {
+          name: a.name,
+          description: a.description ?? "",
+          address: a.address,
+          website: a.website ?? "",
+          image: a.image ?? "",
+          cost: a.cost ?? "",
+          category: a.category ?? "",
+        },
+        score: ((ratings[a.name] ?? DEFAULT_RATING) - min) / range,
+      }));
+
+      genBtn.disabled = true;
+      genBtn.textContent = "Generating itinerary\u2026";
+
+      try {
+        const itinerary = await generateItinerary(constraints, scoredEvents);
+        localStorage.setItem("unserious-itinerary", JSON.stringify(itinerary));
+        window.location.href = "/itinerary";
+      } catch (err) {
+        if (genError) {
+          genError.textContent =
+            err instanceof Error ? err.message : "Something went wrong. Please try again.";
+          genError.classList.remove("hidden");
+        }
+        genBtn.disabled = false;
+        genBtn.textContent = "Generate Itinerary";
+      }
+    });
+  }
 }
 
 function loadState(): RatingState {
@@ -143,8 +200,8 @@ function renderPair(pair: [Activity, Activity], cards: HTMLElement[]) {
     }
     title.textContent = activity.name;
     address.textContent = activity.address;
-    image.style.backgroundImage = `url(${getImageUrl(activity.name)})`;
-    image.setAttribute("aria-label", `${activity.name} photo placeholder`);
+    image.style.backgroundImage = `url(${getImageUrl(activity)})`;
+    image.setAttribute("aria-label", `${activity.name} photo`);
   });
 }
 
@@ -152,7 +209,10 @@ function updateStats(countEl: HTMLElement, state: RatingState) {
   countEl.textContent = state.comparisons.toString();
 }
 
-function getImageUrl(name: string) {
-  const text = encodeURIComponent(name);
+function getImageUrl(activity: Activity) {
+  if (activity.image) {
+    return activity.image;
+  }
+  const text = encodeURIComponent(activity.name);
   return `https://placehold.co/600x420/edd9c9/2b2623?text=${text}`;
 }

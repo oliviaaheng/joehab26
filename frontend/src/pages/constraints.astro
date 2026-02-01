@@ -67,8 +67,9 @@ import PrimaryButton from "../components/PrimaryButton.astro";
             <p class="text-xs font-medium uppercase tracking-[0.3em] text-[#9a8578]">
               We'll match your pace.
             </p>
-            <PrimaryButton type="submit" label="Find Activities" />
+            <PrimaryButton type="submit" label="Find Activities" id="constraints-submit" />
           </div>
+          <p id="constraints-error" class="hidden text-sm font-medium text-red-600"></p>
         </form>
       </section>
     </div>
@@ -81,6 +82,55 @@ import PrimaryButton from "../components/PrimaryButton.astro";
       altInput: true,
       altFormat: "F j, Y",
       dateFormat: "Y-m-d",
+    });
+  </script>
+
+  <script>
+    import { generateActivities } from "../scripts/api";
+
+    const form = document.querySelector<HTMLFormElement>("form")!;
+    const btn = document.getElementById("constraints-submit") as HTMLButtonElement;
+    const errorEl = document.getElementById("constraints-error")!;
+    const originalLabel = btn.textContent ?? "Find Activities";
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      errorEl.classList.add("hidden");
+
+      const date = (document.getElementById("constraint-date") as HTMLInputElement).value;
+      const location = (document.getElementById("constraint-location") as HTMLInputElement).value.trim();
+      const stay = (document.getElementById("constraint-stay") as HTMLInputElement).value.trim();
+      const notes = (document.getElementById("constraint-notes") as HTMLTextAreaElement).value.trim();
+
+      if (!date || !location) {
+        errorEl.textContent = "Please fill in the date and city.";
+        errorEl.classList.remove("hidden");
+        return;
+      }
+
+      const constraints = {
+        destination: location,
+        date_of_travel: date,
+        address: stay,
+        freeform_text: notes,
+      };
+
+      btn.disabled = true;
+      btn.textContent = "Finding activities\u2026";
+
+      try {
+        const activities = await generateActivities(constraints);
+        localStorage.setItem("unserious-constraints", JSON.stringify(constraints));
+        localStorage.setItem("unserious-activities", JSON.stringify(activities));
+        localStorage.removeItem("ranking-preferences-v1");
+        window.location.href = "/ranking";
+      } catch (err) {
+        errorEl.textContent =
+          err instanceof Error ? err.message : "Something went wrong. Please try again.";
+        errorEl.classList.remove("hidden");
+        btn.disabled = false;
+        btn.textContent = originalLabel;
+      }
     });
   </script>
 </Layout>
