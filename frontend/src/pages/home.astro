@@ -1,5 +1,23 @@
 ---
 import Layout from "../layouts/Layout.astro";
+
+const activities = [
+  { name: "Prospect Terrace Park", description: "Scenic overlook with views of downtown Providence and the river.", image: "https://i.redd.it/r7wibj1xskn61.jpg", cost: "Free", category: "Nature" },
+  { name: "Coffee Exchange", description: "Student-friendly café near Brown University's campus.", image: "https://www.golocalprov.com/cache/images/cached/cache/images/remote/https_s3.amazonaws.com/media.golocalprov.com/Morgan_Coffee_Exchange_DEC_2022_1_1944_1458_90.jpg", cost: "$", category: "Food" },
+  { name: "RISD Museum", description: "Art and design museum with rotating exhibitions.", image: "https://www.ccri.edu/art/images/risd-1.jpg", cost: "Free (Student ID)", category: "Museum" },
+  { name: "Den Den Café Asiana", description: "A casual cafe counter serving Korean & Japanese favorites in roomy digs", image: "https://www.thefoodlens.com/uploads/2019/02/DEN-DEN-ASIANA-CAFE_PROVIDENCE_THE-FOOD-LENS_BRIAN-SAMUELS-PHOTOGRAPHY_MARCH-2019-0577-copy-768x512.jpg", cost: "$", category: "Food" },
+  { name: "Brown University Campus", description: "Historic campus with walkable green spaces.", image: "https://www.usnews.com/dims4/USNEWS/7072f85/17177859217/resize/800x540%3E/quality/85/?url=https%3A%2F%2Fwww.usnews.com%2Fcmsmedia%2Fd1%2Ffe377768fbb26f45239bd82b4b41d0%2F20191020_COMM_coheamarketing121.png", cost: "Free", category: "Nature" },
+  { name: "John Hay Library", description: "Quiet study space with historic architecture.", image: "https://dynamic-media-cdn.tripadvisor.com/media/photo-o/13/7c/01/1c/alcoves.jpg?w=300&h=300&s=1", cost: "Free", category: "Study" },
+  { name: "Avon Cinema", description: "Historic movie theatre specializing in foreign, independent and documentary films.", image: "https://snworksceo.imgix.net/bdh/0e1f5f77-cf14-4ad2-afad-2da380828d67.sized-1000x1000.jpg?w=1000", cost: "Free", category: "Music" },
+  { name: "India Point Park", description: "Waterfront park along the Providence River.", image: "https://friendsofindiapointpark.org/wp-content/uploads/2024/09/Screen-Shot-2024-09-04-at-4.51.32-PM.png", cost: "Free", category: "Nature" },
+  { name: "East Side Pockets", description: "Mediterranean street food near campus.", image: "https://www.ediningexpress.com/live20/business_data/images/617/menu_items/falafel_wrap.jpg", cost: "$", category: "Food" },
+  { name: "Courtland Club", description: "A cocktail bar, restaurant, social club and performance venue. Live Jazz every Sunday.", image: "https://thevendry.com/cdn-cgi/image/width=1920,quality=75,fit=contain,metadata=none,format=auto/https%3A%2F%2Fs3.us-east-1.amazonaws.com%2Fuploads.thevendry.co%2F36209%2F1689686215257_37115002_206273456743758_582758157906870272_n.jpg", cost: "$$$", category: "Music" },
+  { name: "Roger Williams Park Zoo", description: "The Zoo contains more than 800 animals from 160 species from around the world.", image: "https://pvdeye.org/wp-content/uploads/2025/03/pc0305-1.jpg", cost: "$", category: "Leisure" },
+];
+
+const rotations = ["-3deg", "2deg", "-1.5deg", "3deg", "-2deg", "1deg", "2.5deg", "-2.5deg", "1.5deg", "-1deg", "3deg", "-3deg", "2deg", "-2deg"];
+const tapeColors = ["#f4a7bb", "#a7d8f4", "#f4e0a7", "#b8f4a7", "#d4a7f4", "#f4c4a7", "#a7f4e0", "#f4a7a7", "#a7c4f4", "#e0f4a7", "#f4a7d8", "#a7f4c4", "#c4a7f4", "#f4d8a7"];
+const categoryEmojis: Record<string, string> = { Nature: "🌿", Food: "🍽", Museum: "🎨", Study: "📚", Music: "🎵", Leisure: "✨" };
 ---
 
 <Layout public>
@@ -7,20 +25,21 @@ import Layout from "../layouts/Layout.astro";
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600&family=Space+Grotesk:wght@400;500;600&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&family=Fraunces:opsz,wght@9..144,600&family=Space+Grotesk:wght@400;500;600&display=swap"
       rel="stylesheet"
     />
   </Fragment>
 
-  <main class="flex flex-1 flex-col items-center justify-center px-5 pb-14 pt-10 sm:px-8">
+  <!-- Signed-out view: simple welcome -->
+  <main id="signed-out-view" class="flex flex-1 flex-col items-center justify-center px-5 pb-14 pt-10 sm:px-8">
     <div class="flex max-w-md flex-col items-center gap-6 text-center">
-      <h1 id="greeting" class="font-['Fraunces'] text-3xl sm:text-4xl lg:text-5xl">
+      <h1 class="font-['Fraunces'] text-3xl sm:text-4xl lg:text-5xl">
         Welcome
       </h1>
       <p class="text-base text-[#5e4b41]">
         Plan your next trip day or check how your activities rank.
       </p>
-     <div class="flex gap-4">
+      <div class="flex gap-4">
         <a
           href="/constraints"
           class="rounded-full bg-[#2b2623] px-6 py-2.5 text-sm font-medium text-white transition hover:bg-[#3d3330]"
@@ -37,14 +56,194 @@ import Layout from "../layouts/Layout.astro";
     </div>
   </main>
 
+  <!-- Signed-in view: scrapbook -->
+  <main id="signed-in-view" class="hidden flex flex-1 flex-col items-center px-4 pb-20 pt-8 sm:px-8">
+    <!-- Header -->
+    <div class="mb-10 flex max-w-lg flex-col items-center gap-3 text-center">
+      <p class="font-['Caveat'] text-lg text-[#b08968]">~ a little guide to ~</p>
+      <h1 id="greeting" class="font-['Fraunces'] text-4xl sm:text-5xl lg:text-6xl">
+        Providence, RI
+      </h1>
+      <p class="font-['Caveat'] text-xl text-[#5e4b41]">
+        My favorite spots around town
+      </p>
+      <div class="mt-2 flex gap-4">
+        <a
+          href="/constraints"
+          class="rounded-full bg-[#2b2623] px-6 py-2.5 text-sm font-medium text-white transition hover:bg-[#3d3330]"
+        >
+          Plan a Day
+        </a>
+        <a
+          href="/my-itineraries"
+          class="rounded-full border border-[#d4c4b5] bg-white/60 px-6 py-2.5 text-sm font-medium text-[#5e4b41] transition hover:bg-white"
+        >
+          My Trips
+        </a>
+      </div>
+    </div>
+
+    <!-- Decorative divider -->
+    <div class="mb-10 flex items-center gap-3 text-[#d4c4b5]">
+      <span class="h-px w-12 bg-[#d4c4b5]"></span>
+      <span class="font-['Caveat'] text-2xl text-[#b08968]">&#10045; &#10047; &#10045;</span>
+      <span class="h-px w-12 bg-[#d4c4b5]"></span>
+    </div>
+
+    <!-- Scrapbook grid -->
+    <div class="scrapbook-grid mx-auto grid w-full max-w-6xl grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
+      {activities.map((activity, i) => (
+        <div
+          class="scrapbook-card group relative"
+          style={`--rotation: ${rotations[i]}; --tape-color: ${tapeColors[i]};`}
+        >
+          <!-- Washi tape decoration -->
+          <div class="tape-strip" />
+
+          <!-- Photo card -->
+          <div class="relative overflow-hidden rounded-sm bg-white p-3 shadow-[4px_4px_15px_rgba(0,0,0,0.08)]">
+            <!-- Image -->
+            <div class="relative mb-3 aspect-[4/3] overflow-hidden rounded-sm bg-[#f0e4d6]">
+              <img
+                src={activity.image}
+                alt={activity.name}
+                class="h-full w-full object-cover transition duration-500 group-hover:scale-105"
+                loading="lazy"
+              />
+            </div>
+
+            <!-- Caption area styled like handwriting -->
+            <div class="space-y-1 px-1 pb-1">
+              <div class="flex items-start justify-between gap-2">
+                <h3 class="font-['Caveat'] text-xl font-bold leading-tight text-[#2b2623]">
+                  {activity.name}
+                </h3>
+                <span class="mt-0.5 shrink-0 text-lg" title={activity.category}>
+                  {categoryEmojis[activity.category]}
+                </span>
+              </div>
+              <p class="font-['Caveat'] text-base leading-snug text-[#7a6555]">
+                {activity.description}
+              </p>
+              <div class="flex items-center gap-2 pt-1">
+                <span class="inline-block rounded-full bg-[#f7efe8] px-2.5 py-0.5 font-['Caveat'] text-sm font-semibold text-[#b08968]">
+                  {activity.cost}
+                </span>
+                <span class="inline-block rounded-full bg-[#f7efe8] px-2.5 py-0.5 font-['Caveat'] text-sm text-[#b08968]">
+                  {activity.category}
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Corner doodle decorations (alternating) -->
+          {i % 3 === 0 && (
+            <div class="pointer-events-none absolute -bottom-3 -right-3 font-['Caveat'] text-3xl text-[#d4c4b5] opacity-60">
+              &#10022;
+            </div>
+          )}
+          {i % 3 === 1 && (
+            <div class="pointer-events-none absolute -bottom-2 -left-2 font-['Caveat'] text-2xl text-[#d4c4b5] opacity-60">
+              &#9829;
+            </div>
+          )}
+          {i % 3 === 2 && (
+            <div class="pointer-events-none absolute -top-2 -right-2 font-['Caveat'] text-2xl text-[#d4c4b5] opacity-60">
+              &#10038;
+            </div>
+          )}
+        </div>
+      ))}
+    </div>
+
+    <!-- Bottom decorative flourish -->
+    <div class="mt-14 flex flex-col items-center gap-2">
+      <div class="flex items-center gap-3 text-[#d4c4b5]">
+        <span class="h-px w-16 bg-[#d4c4b5]"></span>
+        <span class="font-['Caveat'] text-2xl text-[#b08968]">&#10047;</span>
+        <span class="h-px w-16 bg-[#d4c4b5]"></span>
+      </div>
+      <p class="font-['Caveat'] text-lg text-[#b08968]">made with love in Providence</p>
+    </div>
+  </main>
+
+  <style>
+    .scrapbook-card {
+      transform: rotate(var(--rotation, 0deg));
+      transition: transform 0.3s ease;
+    }
+    .scrapbook-card:hover {
+      transform: rotate(0deg) scale(1.03);
+      z-index: 10;
+    }
+
+    /* Washi tape strip across the top */
+    .tape-strip {
+      position: absolute;
+      top: -8px;
+      left: 50%;
+      transform: translateX(-50%) rotate(var(--rotation, 0deg));
+      width: 80px;
+      height: 22px;
+      background-color: var(--tape-color, #f4a7bb);
+      opacity: 0.55;
+      z-index: 2;
+      border-radius: 1px;
+      mask-image: repeating-linear-gradient(
+        90deg,
+        transparent 0px,
+        transparent 1px,
+        black 1px,
+        black 4px
+      );
+    }
+
+    /* Stagger animation on load */
+    .scrapbook-card {
+      animation: scrapbook-pop-in 0.5s ease both;
+    }
+    .scrapbook-card:nth-child(1)  { animation-delay: 0.0s; }
+    .scrapbook-card:nth-child(2)  { animation-delay: 0.05s; }
+    .scrapbook-card:nth-child(3)  { animation-delay: 0.1s; }
+    .scrapbook-card:nth-child(4)  { animation-delay: 0.15s; }
+    .scrapbook-card:nth-child(5)  { animation-delay: 0.2s; }
+    .scrapbook-card:nth-child(6)  { animation-delay: 0.25s; }
+    .scrapbook-card:nth-child(7)  { animation-delay: 0.3s; }
+    .scrapbook-card:nth-child(8)  { animation-delay: 0.35s; }
+    .scrapbook-card:nth-child(9)  { animation-delay: 0.4s; }
+    .scrapbook-card:nth-child(10) { animation-delay: 0.45s; }
+    .scrapbook-card:nth-child(11) { animation-delay: 0.5s; }
+    .scrapbook-card:nth-child(12) { animation-delay: 0.55s; }
+    .scrapbook-card:nth-child(13) { animation-delay: 0.6s; }
+    .scrapbook-card:nth-child(14) { animation-delay: 0.65s; }
+
+    @keyframes scrapbook-pop-in {
+      from {
+        opacity: 0;
+        transform: rotate(var(--rotation, 0deg)) scale(0.85) translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: rotate(var(--rotation, 0deg)) scale(1) translateY(0);
+      }
+    }
+  </style>
+
   <script>
     import { getUser } from "../scripts/auth";
 
+    const signedOutView = document.getElementById("signed-out-view");
+    const signedInView = document.getElementById("signed-in-view");
     const greeting = document.getElementById("greeting");
     const user = getUser();
-    if (greeting && user) {
-      const firstName = user.name.split(" ")[0];
-      greeting.textContent = `Welcome back, ${firstName}`;
+
+    if (user) {
+      signedOutView?.classList.add("hidden");
+      signedInView?.classList.remove("hidden");
+      if (greeting) {
+        const firstName = user.name.split(" ")[0];
+        greeting.textContent = `${firstName}'s Providence`;
+      }
     }
   </script>
 </Layout>
