@@ -6,7 +6,7 @@
         "description": "Wide sandy beach suitable for families and kids.",
         "address": "Atlantic City Beach, Atlantic City, NJ",
         "website": "https://www.atlanticcitynj.com",
-        "image": "https://assets.simpleviewinc.com/sv-atlantic-city/image/upload/c_fill,h_800,q_75,w_1200/v1/clients/atlanticcity/Image_1_224cbe78-224e-4b4b-bd6a-8931d3b2debe.jpg",
+        "image": "",
         "cost": "Free",
         "category": "Nature"
       },
@@ -20,7 +20,7 @@
         "description": "Flat, stroller-friendly boardwalk along the beach.",
         "address": "Atlantic City Boardwalk, Atlantic City, NJ",
         "website": "https://www.atlanticcitynj.com",
-        "image": "https://assets.simpleviewinc.com/sv-atlantic-city/image/upload/c_fill,f_jpg,g_xy_center,h_655,q_65,w_639,x_2732,y_964/v1/cms_resources/cms_resources/clients/meetac/DJI_0084_d4ff2b39-ab46-4ed4-bb63-66721cb6cdaa.jpg",
+        "image": "",
         "cost": "Free",
         "category": "Nature"
       },
@@ -34,7 +34,7 @@
         "description": "Family-friendly rides and games on the pier.",
         "address": "1000 Boardwalk, Atlantic City, NJ",
         "website": "https://www.steelpier.com",
-        "image": "https://example.com/steel-pier.jpg",
+        "image": "",
         "cost": "$",
         "category": "Attraction"
       },
@@ -44,25 +44,11 @@
     },
     {
       "event": {
-        "name": "Vegans R Us",
+        "name": "Greens and Grains",
         "description": "Vegetarian and vegan comfort food.",
         "address": "2318 Arctic Ave, Atlantic City, NJ",
-        "website": "https://example.com/vegansrus",
-        "image": "https://example.com/vegansrus.jpg",
-        "cost": "$",
-        "category": "Food"
-      },
-      "start": "2026-07-01T12:45:00-04:00",
-      "end": "2026-07-01T13:30:00-04:00",
-      "pictures": []
-    },
-    {
-      "event": {
-        "name": "Atlantic City Aquarium",
-        "description": "Marine exhibits that are engaging for kids.",
-        "address": "800 N New Hampshire Ave, Atlantic City, NJ",
-        "website": "https://www.acaquarium.com",
-        "image": "https://example.com/aquarium.jpg",
+        "website": "https://www.greensandgrains.com/location/ventnor-nj/",
+        "image": "",
         "cost": "$",
         "category": "Museum"
       },
@@ -72,13 +58,13 @@
     },
     {
       "event": {
-        "name": "Gardner's Basin",
-        "description": "Waterfront area with open space and boat views.",
-        "address": "800 N New Hampshire Ave, Atlantic City, NJ",
-        "website": "https://www.gardnersbasin.com",
-        "image": "https://example.com/gardners-basin.jpg",
-        "cost": "Free",
-        "category": "Nature"
+        "name": "Dave and Busters Atlantic City",
+        "description": "A premier eatertainment chain featuring a large, modern arcade, a full-service restaurant, and a sports bar with big-screen TVs.",
+        "address": "2120 Atlantic Ave Suite 912, Atlantic City, NJ 08401",
+        "website": "https://www.daveandbusters.com/us/en/about/locations/atlantic-city",
+        "image": "",
+        "cost": "$$",
+        "category": "Entertainment"
       },
       "start": "2026-07-01T15:00:00-04:00",
       "end": "2026-07-01T15:45:00-04:00",
@@ -89,8 +75,8 @@
         "name": "Central Pier Arcade",
         "description": "Classic arcade games suitable for kids.",
         "address": "1400 Boardwalk, Atlantic City, NJ",
-        "website": "https://example.com/central-pier",
-        "image": "https://example.com/arcade.jpg",
+        "website": "",
+        "image": "",
         "cost": "$",
         "category": "Entertainment"
       },
@@ -100,11 +86,11 @@
     },
     {
       "event": {
-        "name": "Atlantic City Mini Golf",
+        "name": "North Beach Mini Golf",
         "description": "Outdoor mini golf near the boardwalk.",
-        "address": "New Jersey Ave & Boardwalk, Atlantic City, NJ",
-        "website": "https://example.com/minigolf",
-        "image": "https://example.com/minigolf.jpg",
+        "address": "120 Euclid Ave, Atlantic City, NJ 08401",
+        "website": "https://www.northbeachminigolf.com/",
+        "image": "",
         "cost": "$",
         "category": "Attraction"
       },
@@ -117,8 +103,8 @@
         "name": "Hard Rock Cafe Atlantic City",
         "description": "Vegetarian-friendly menu options and music theme.",
         "address": "1000 Boardwalk, Atlantic City, NJ",
-        "website": "https://www.hardrock.com",
-        "image": "https://example.com/hard-rock.jpg",
+        "website": "https://cafe.hardrock.com/atlantic-city/#utm_source=Google&utm_medium=Yext&utm_campaign=Listings",
+        "image": "",
         "cost": "$$",
         "category": "Food"
       },
@@ -128,13 +114,13 @@
     },
     {
       "event": {
-        "name": "Boardwalk Playground",
-        "description": "Small outdoor play areas along the boardwalk.",
-        "address": "Atlantic City Boardwalk, Atlantic City, NJ",
-        "website": "https://www.atlanticcitynj.com",
-        "image": "https://example.com/playground.jpg",
-        "cost": "Free",
-        "category": "Kids"
+        "name": "Tanger Outlets",
+        "description": "Visit Tanger for a unique shopping experience. Find your favorite brands and experience exceptional guest service. Shop with unbeatable value at Tanger.",
+        "address": "1931 Atlantic Ave, Atlantic City, NJ 08401",
+        "website": "https://www.tanger.com/atlanticcity",
+        "image": "",
+        "cost": "$$",
+        "category": "Shopping"
       },
       "start": "2026-07-01T19:15:00-04:00",
       "end": "2026-07-01T20:00:00-04:00",
@@ -142,13 +128,13 @@
     },
     {
       "event": {
-        "name": "Sunset Beach Walk",
-        "description": "Evening walk along the shoreline.",
-        "address": "Atlantic City Beach, Atlantic City, NJ",
-        "website": "https://www.atlanticcitynj.com",
+        "name": "Borgata Casino",
+        "description": "Borgata Hotel Casino & Spa is a premier luxury resort in Atlantic City, offering an unbeatable combination of world-class gaming, fine dining, and top-tier entertainment. ",
+        "address": "1 Borgata Way Atlantic City, NJ 08401",
+        "website": "https://borgata.mgmresorts.com/en.html",
         "image": "https://example.com/sunset-beach.jpg",
-        "cost": "Free",
-        "category": "Nature"
+        "cost": "$$$",
+        "category": "Casino"
       },
       "start": "2026-07-01T20:15:00-04:00",
       "end": "2026-07-01T21:00:00-04:00",
@@ -156,11 +142,11 @@
     },
     {
       "event": {
-        "name": "Boardwalk Ice Cream",
-        "description": "Ice cream and dessert shops along the boardwalk.",
+        "name": "Sugar Factory",
+        "description": "A high-energy, celebrity-favored American brasserie known for its Instagram-worthy, over-the-top desserts, smoking candy goblets, and colorful, decadent comfort food",
         "address": "Atlantic City Boardwalk, Atlantic City, NJ",
-        "website": "https://example.com/ice-cream",
-        "image": "https://example.com/ice-cream.jpg",
+        "website": "https://sf1.sugarfactory.com/",
+        "image": "",
         "cost": "$",
         "category": "Food"
       },
@@ -170,13 +156,13 @@
     },
     {
       "event": {
-        "name": "Hotel Pool",
+        "name": "Ocean Casino Resort",
         "description": "Relax and swim at the hotel pool.",
-        "address": "Atlantic City, NJ",
-        "website": "https://example.com/hotel",
-        "image": "https://example.com/pool.jpg",
-        "cost": "Included",
-        "category": "Rest"
+        "address": "500 Boardwalk, Atlantic City, NJ 08401",
+        "website": "https://www.theoceanac.com/",
+        "image": "",
+        "cost": "$$$",
+        "category": "Casino"
       },
       "start": "2026-07-01T21:45:00-04:00",
       "end": "2026-07-01T22:45:00-04:00",
@@ -184,13 +170,13 @@
     },
     {
       "event": {
-        "name": "Hotel Room",
+        "name": "IMAX Theather at Tropicana",
         "description": "Return to hotel and rest.",
-        "address": "Atlantic City, NJ",
-        "website": "https://example.com/hotel",
-        "image": "https://example.com/hotel-room.jpg",
-        "cost": "Included",
-        "category": "Rest"
+        "address": "2831 Boardwalk, Atlantic City, NJ 08401",
+        "website": "https://www.caesars.com/tropicana-ac/things-to-do/attractions/imax",
+        "image": "",
+        "cost": "$",
+        "category": "Entertainment"
       },
       "start": "2026-07-01T23:00:00-04:00",
       "end": "2026-07-02T00:00:00-04:00",
